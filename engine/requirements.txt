@@ -1,0 +1,7 @@
+pillow
+numpy
+opencv-python
+mss
+pynput
+pyautogui
+screeninfo
