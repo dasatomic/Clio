@@ -1,7 +1,9 @@
 pillow
 numpy
+# ffmpeg also needs to be available in the path
 opencv-python
 mss
 pynput
 pyautogui
 screeninfo
+PySimpleGUI

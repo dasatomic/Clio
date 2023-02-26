@@ -7,13 +7,15 @@ import pyautogui
 from screeninfo import get_monitors
 import subprocess
 
+import screen_recorder
+
 def test_basic_capture():
     (mon_width, mon_height) = [(m.width, m.height) for m in get_monitors()][0]
     mon = {'left': 0, 'top': 0, 'width': mon_width, 'height': mon_height}
 
     video = cv2.VideoWriter("output.mp4", 0, 1, (mon_width,mon_height))
     with mss() as sct:
-        for i in range(30):
+        for i in range(10):
             screenShot = sct.grab(mon)
             img = Image.frombytes(
                 'RGB', 
@@ -34,9 +36,15 @@ def test_basic_capture():
             # in reality this was 43mbs (for only 1min)
     video.release()
     subprocess.call(['ffmpeg', '-i', 'output.mp4', '-vcodec', 'libx265', '-crf', '28', 'output_compressed.mp4'])
+    subprocess.call(['ffmpeg', '-i', 'output_compressed.mp4', '-r', '1/1' 'from_compressed%03d.jpg]'])
     # video is 35mb, which is also a lot...
     # and compressed is 500kb. This is kind of ok...
     # ffmpeg -i output.mp4 -vcodec libx265 -crf 28 output_compressed.mp4
 
     # 1min is 500kb. 1h is 30mb. 24h is 720mb. <- this is a lot, but not terrible.
     # but ok, I should be able to store 1 month worth of data in like 10gb or something.
+
+def test_capture():
+    sr = screen_recorder.ScreenRecorder()
+    sr.take_screenshot()
+    assert sr.get_history_len() == 1
